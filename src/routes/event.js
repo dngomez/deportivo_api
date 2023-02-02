@@ -3,7 +3,7 @@ import { Event } from '../models/event.js'
 
 const router = express.Router()
 
-// GET - get all events
+// GET - Get all events
 router.get('/all', async (_, res) => {
   try {
     res.status(200).json({ results: await Event.find() })
@@ -21,6 +21,29 @@ router.post('/create', async (req, res) => {
       endDate: new Date(req.body.endDate)
     })
     res.status(201).json({ event })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error })
+  }
+})
+
+// PATCH - Update event
+router.patch('/update', async (req, res) => {
+  try {
+    let event = await Event.updateOne(req.query, req.body).exec()
+    res.status(201).json({ event })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error })
+  }
+})
+
+// DELETE - Delete event
+router.delete('/delete', async (req, res) => {
+  try {
+    let event = await Event.deleteOne(req.query).exec()
+    console.log(event)
+    res.status(200).json({ event })
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: error })
