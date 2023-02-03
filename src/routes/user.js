@@ -76,4 +76,19 @@ router.post('/login', async (req, res) => {
   })
 })
 
+// PATCH - Update user
+router.patch('/update', async (req, res) => {
+  try {
+    let user = await User.findOneAndUpdate(req.query, req.body, { new: true })
+    let token = generateToken(user)
+    return res.status(200).json({
+      user: user,
+      token: token
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error })
+  }
+})
+
 export default router

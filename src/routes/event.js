@@ -30,7 +30,7 @@ router.post('/create', async (req, res) => {
 // PATCH - Update event
 router.patch('/update', async (req, res) => {
   try {
-    let event = await Event.updateOne(req.query, req.body).exec()
+    let event = await Event.findOneAndUpdate(req.query, req.body, { new: true })
     res.status(201).json({ event })
   } catch (error) {
     console.log(error)
@@ -41,8 +41,7 @@ router.patch('/update', async (req, res) => {
 // DELETE - Delete event
 router.delete('/delete', async (req, res) => {
   try {
-    let event = await Event.deleteOne(req.query).exec()
-    console.log(event)
+    let event = await Event.findOneAndDelete(req.query)
     res.status(200).json({ event })
   } catch (error) {
     console.log(error)
