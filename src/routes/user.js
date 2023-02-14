@@ -31,18 +31,20 @@ router.get('/', async (_, res) => {
 })
 
 // User sign
-router.post('/signup', async (req, res) => {
+router.post('/create', async (req, res) => {
   var body = req.body
-  var hash = hashSync(body.user.password.trim(), 10)
+  var hash = hashSync(body.password.trim(), 10)
 
-  let created = await User.exists({ username: body.user.email.trim() })
-  if (created)
+  let created = await User.exists({ email: body.email.trim() })
+  console.log(created)
+  if (created) {
     return res.status(500).json({
-      error: 'Username already taken'
+      error: 'El correo ya se encuentra registrado'
     })
+  }
   
   let user = await User.create({
-    ...body.user,
+    ...body,
     password: hash,
     created: new Date()
   })
