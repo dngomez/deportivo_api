@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   created: Date, 
   subscribed: Boolean,
   theme: String,
+  role: String,
   image: {
     data: Buffer,
     contentType: String

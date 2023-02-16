@@ -1,25 +1,9 @@
 import express from 'express'
 import { hashSync, compare } from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { User } from '../models/user.js'
+import { generateToken, checkPermissions } from '../helpers/tokenHandler.js'
 
 const router = express.Router()
-
-// Generate JSON web token based on user info
-function generateToken(user) {
-  let u = {
-    _id: user._id.toString(),
-    first_name: user.first_name,
-    last_name: user.last_name,
-    email: user.email,
-    birthday: user.birthday,
-    subscribed: user.subscribed
-  }
-
-  return jwt.sign(u, process.env.JWT_SECRET || 'secretJWT', {
-    expiresIn: 60 * 60 * 24 * 7 // expires in 7 day
-  })
-}
 
 // GET CURRENT
 router.get('/', async (_, res) => {
@@ -36,7 +20,6 @@ router.post('/create', async (req, res) => {
   var hash = hashSync(body.password.trim(), 10)
 
   let created = await User.exists({ email: body.email.trim() })
-  console.log(created)
   if (created) {
     return res.status(500).json({
       error: 'El correo ya se encuentra registrado'
@@ -81,6 +64,8 @@ router.post('/login', async (req, res) => {
 // PATCH - Update user
 router.patch('/update', async (req, res) => {
   try {
+    if (!checkPermissions(req, "User"))
+      return res.status(401).json({ error: "Permisos insuficientes" })
     let user = await User.findOneAndUpdate(req.query, req.body, { new: true })
     let token = generateToken(user)
     return res.status(200).json({
