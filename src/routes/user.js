@@ -78,4 +78,18 @@ router.patch('/update', async (req, res) => {
   }
 })
 
+// GET IMAGE
+router.get('/image', async (req, res) => {
+  try {
+    if (!checkPermissions(req, "User"))
+      return res.status(401).json({ error: "Permisos insuficientes" })
+    let user = await User.findOne(req.query).exec()
+    return res.status(200).json({
+      image: user.image
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error })
+  }
+})
 export default router
