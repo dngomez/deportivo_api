@@ -29,6 +29,7 @@ router.post('/create', async (req, res) => {
   let user = await User.create({
     ...body,
     password: hash,
+    role: (body.subscribed) ? "Member" : "User",
     created: new Date()
   })
 
