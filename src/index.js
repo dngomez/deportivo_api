@@ -6,7 +6,8 @@ import mongoose from 'mongoose'
 import { MONGO_URI } from "./shared/constants.js"
 
 // Connect to database
-mongoose.connect(MONGO_URI)
+let mongoUri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb+srv://localhost:27017/admin"
+mongoose.connect(process.env.MONGO_URI)
 .then(_db => console.log(`Database is connected`))
 .catch(err => {
   console.log(err)
