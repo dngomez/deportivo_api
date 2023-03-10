@@ -3,7 +3,6 @@ import morgan from 'morgan'
 import cors from 'cors'
 import 'dotenv/config'
 import mongoose from 'mongoose'
-import { MONGO_URI } from "./shared/constants.js"
 
 // Connect to database
 let mongoUri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb+srv://localhost:27017/admin"
