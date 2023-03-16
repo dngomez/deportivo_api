@@ -51,7 +51,7 @@ router.patch('/update', async (req, res) => {
 // DELETE - Delete event
 router.delete('/delete', async (req, res) => {
   try {
-    let currentEvent = Event.findOne(req.query).exec()
+    let currentEvent = await Event.findOne(req.query).exec()
     if (getUserFromToken(req)?._id === currentEvent.user || checkPermissions(req, "Staff")) {
       let event = await Event.findOneAndDelete(req.query)
       res.status(200).json({ event })
