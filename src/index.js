@@ -34,9 +34,11 @@ app.use(cors(corsOptions))
 // Routes
 import UserRoutes from './routes/user.js'
 import EventRoutes from './routes/event.js'
+import ImgRoutes from './routes/img.js'
 
 app.use('/api/user', UserRoutes)
 app.use('/api/event', EventRoutes)
+app.use('/api/img', ImgRoutes)
 
 // Static files
 // app.use(express.static(path.join(__dirname, 'public')))
