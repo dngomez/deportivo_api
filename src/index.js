@@ -35,10 +35,12 @@ app.use(cors(corsOptions))
 import UserRoutes from './routes/user.js'
 import EventRoutes from './routes/event.js'
 import ImgRoutes from './routes/img.js'
+import SportRoutes from './routes/sport.js'
 
 app.use('/api/user', UserRoutes)
 app.use('/api/event', EventRoutes)
 app.use('/api/img', ImgRoutes)
+app.use('/api/sport', SportRoutes)
 
 // Static files
 // app.use(express.static(path.join(__dirname, 'public')))
