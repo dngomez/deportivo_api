@@ -14,6 +14,20 @@ router.get('/', async (_, res) => {
   }
 })
 
+// GET Coordinator by ID
+router.get('/coordinator', async (req, res) => {
+  try {
+    let coord = await User.findOne(req.query)
+    res.status(200).json({ result: {
+      name: `${coord.first_name.split(' ')[0]} ${coord.last_name.split(' ')[0]}`,
+      email: coord.email,
+      image: coord.image
+    } })
+  } catch (error) {
+    res.status(500).json({ error: error })
+  }
+})
+
 // User sign
 router.post('/create', async (req, res) => {
   var body = req.body
