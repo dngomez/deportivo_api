@@ -2,8 +2,11 @@ import express from 'express'
 import { hashSync, compare } from 'bcrypt'
 import { User } from '../models/user.js'
 import { generateToken, checkPermissions } from '../helpers/tokenHandler.js'
+import { sendEmail } from '../helpers/mailer.js'
+import { v4 as uuidv4 } from 'uuid'
 
 const router = express.Router()
+const passwordRecoveryUuid = []
 
 // GET CURRENT
 router.get('/', async (_, res) => {
@@ -74,6 +77,64 @@ router.post('/login', async (req, res) => {
       token: token
     })
   })
+})
+
+// Password recovery
+router.post('/password_recovery', async (req, res) => {
+  try {
+    let user = await User.findOne({ email: req.body.email }).exec()
+
+    if (!Boolean(user))
+    return res.status(404).json({
+      error: 'Email not found'
+    })
+
+    let id = uuidv4()
+    passwordRecoveryUuid.push({ id: id, email: user.email })
+    setTimeout(() => passwordRecoveryUuid.shift(), 1000 * 60 * 60)
+
+    sendEmail(
+      user.email,
+      "Reestablecer contraseña",
+      `Hola ${user.first_name.split(" ")[0]}
+      <br><br>
+      Al parecer olvidaste tu contraseña y solicitaste reestablecerla.
+      <br>
+      Si no has sido tú, por favor ignora este correo.
+      <br>
+      En caso contrario, para reestablecer tu contraseña por favor ingresa al siguiente link:
+      <br>
+      <a href="https://cdeportivoaura.cl/password_reset/${id}">Reestablecer contraseña</a><br>`
+    )
+
+    res.status(200).json({
+      message: "Password recovery email sent"
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error })
+  }
+})
+
+// Password recovery update pass
+router.post('/update_password', async (req, res) => {
+  let email = passwordRecoveryUuid.filter(e => e.id === req.body.uuid)[0]?.email
+  console.log(req.body)
+  console.log(passwordRecoveryUuid)
+  console.log(email)
+  if (!Boolean(email)) return res.status(404).json({
+    error: 'URL token expired'
+  })
+
+  var hash = hashSync(req.body.password.trim(), 10)
+  let user = await User.findOneAndUpdate({ email: email }, { password: hash }, { new: true })
+  if (!Boolean(user)) {
+    return res.status(404).json({
+      error: 'Email not found'
+    })
+  }
+
+  return res.status(200).json({user: user})
 })
 
 // PATCH - Update user
