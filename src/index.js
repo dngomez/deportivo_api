@@ -37,12 +37,14 @@ import EventRoutes from './routes/event.js'
 import ImgRoutes from './routes/img.js'
 import SportRoutes from './routes/sport.js'
 import ContactRoutes from './routes/contact.js'
+import NewRoutes from './routes/new.js'
 
 app.use('/api/user', UserRoutes)
 app.use('/api/event', EventRoutes)
 app.use('/api/img', ImgRoutes)
 app.use('/api/sport', SportRoutes)
 app.use('/api/contact', ContactRoutes)
+app.use('/api/new', NewRoutes)
 
 // Static files
 // app.use(express.static(path.join(__dirname, 'public')))
