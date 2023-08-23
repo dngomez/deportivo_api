@@ -7,13 +7,13 @@ import mongoose from 'mongoose'
 // Connect to database
 let mongoUri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb+srv://localhost:27017/admin"
 mongoose.connect(process.env.MONGO_URI)
-.then(_db => console.log(`Database is connected`))
-.catch(err => {
-  console.log(err)
-  console.log("\n---------------------------------------")
-  console.log("Exit web until DB is ready\n")
-  return process.exit(22)
-})
+  .then(_db => console.log(`Database is connected`))
+  .catch(err => {
+    console.log(err)
+    console.log("\n---------------------------------------")
+    console.log("Exit web until DB is ready\n")
+    return process.exit(22)
+  })
 
 const app = express()
 
@@ -31,6 +31,9 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(cors(corsOptions))
 
+// Use a different baseUrl
+let baseUrl = '/'
+
 // Routes
 import UserRoutes from './routes/user.js'
 import EventRoutes from './routes/event.js'
@@ -39,12 +42,12 @@ import SportRoutes from './routes/sport.js'
 import ContactRoutes from './routes/contact.js'
 import NewRoutes from './routes/new.js'
 
-app.use('/api/user', UserRoutes)
-app.use('/api/event', EventRoutes)
-app.use('/api/img', ImgRoutes)
-app.use('/api/sport', SportRoutes)
-app.use('/api/contact', ContactRoutes)
-app.use('/api/new', NewRoutes)
+app.use(`${baseUrl}api/user`, UserRoutes)
+app.use(`${baseUrl}api/event`, EventRoutes)
+app.use(`${baseUrl}api/img`, ImgRoutes)
+app.use(`${baseUrl}api/sport`, SportRoutes)
+app.use(`${baseUrl}api/contact`, ContactRoutes)
+app.use(`${baseUrl}api/new`, NewRoutes)
 
 // Static files
 // app.use(express.static(path.join(__dirname, 'public')))
