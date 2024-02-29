@@ -37,6 +37,7 @@ let baseUrl = '/'
 // Routes
 import UserRoutes from './routes/user.js'
 import EventRoutes from './routes/event.js'
+import GymEventRoutes from './routes/gymEvent.js'
 import ImgRoutes from './routes/img.js'
 import SportRoutes from './routes/sport.js'
 import ContactRoutes from './routes/contact.js'
@@ -44,6 +45,7 @@ import NewRoutes from './routes/new.js'
 
 app.use(`${baseUrl}api/user`, UserRoutes)
 app.use(`${baseUrl}api/event`, EventRoutes)
+app.use(`${baseUrl}api/gymEvent`, GymEventRoutes)
 app.use(`${baseUrl}api/img`, ImgRoutes)
 app.use(`${baseUrl}api/sport`, SportRoutes)
 app.use(`${baseUrl}api/contact`, ContactRoutes)
